@@ -3,6 +3,8 @@ var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var swig = require('swig');
 var sassMiddleware = require('node-sass-middleware'); 
+var routes = require('./routes');
+var api = require('./routes/api/days.js');
 
 var app = express();
 
@@ -32,7 +34,8 @@ app.use(
 app.use(express.static(__dirname + '/public'));
 
 // serve routes
-app.use(require('./routes'));
+app.use('/', routes);
+app.use('/api', api);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

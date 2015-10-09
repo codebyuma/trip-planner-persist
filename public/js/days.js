@@ -17,8 +17,25 @@ var daysModule = (function(){
       restaurants: [],
       activities: []
     });
+    var dayToAdd = days.length;
+
+    $.ajax({
+        method: 'POST',
+        url: '/api/days/' + dayToAdd,
+        data: dayToAdd,
+        success: function (responseData){
+            console.log("SUCCESS");
+        },
+        error: function (errorObj){
+          console.log("FAIL");
+        }
+
+    });
+
     renderDayButtons();
     switchDay(days.length - 1);
+
+
   }
 
   function switchDay (index) {
@@ -36,6 +53,22 @@ var daysModule = (function(){
     var index = days.indexOf(currentDay);
     days.splice(index, 1);
     switchDay(index);
+
+ /// HERE
+    $.ajax({
+    method: 'POST',
+    url: '/api/days/' + dayToAdd,
+    data: dayToAdd,
+    success: function (responseData){
+        console.log("SUCCESS");
+    },
+    error: function (errorObj){
+      console.log("FAIL");
+    }
+
+    });
+
+
   }
 
   function renderDayButtons () {
