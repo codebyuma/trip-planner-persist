@@ -20,7 +20,7 @@ dayRouter.get("/days/:day", function(req, res){
 	});
 })
 
-/** HERE *//
+
 dayRouter.post("/days/:day", function (req, res){
 	
 	var dayToAdd = Number(req.params.day);
@@ -34,18 +34,25 @@ dayRouter.post("/days/:day", function (req, res){
 	
 })
 
-
 dayRouter.delete("/days/:day", function (req, res){
 	console.log("delete days/day");
 	var dayToDelete = Number(req.params.day);
-	// Days.delete({number: dayToDelete}).exec()
-	// .then(function(removedDay){
-	// 	console.log(removedDay);
-	// });
+	Days.findOne({number: dayToDelete})
+	// .then(function(day){
+	// 	console.log("day",day);
+	// 	res.send();
+	// })
+		.remove(function(){
+			console.log("in remove");
+			console.log("then of find one .remove ");
+			res.send();
+		})
+
+		
 })
 
 
-
+/** HERE */
 dayRouter.post("/days/:id/:attraction", function (req, res){
 	console.log("post days/id/attraction");
 

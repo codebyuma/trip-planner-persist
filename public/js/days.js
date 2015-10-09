@@ -22,7 +22,7 @@ var daysModule = (function(){
     $.ajax({
         method: 'POST',
         url: '/api/days/' + dayToAdd,
-        data: dayToAdd,
+        data: null,
         success: function (responseData){
             console.log("SUCCESS");
         },
@@ -34,8 +34,6 @@ var daysModule = (function(){
 
     renderDayButtons();
     switchDay(days.length - 1);
-
-
   }
 
   function switchDay (index) {
@@ -52,15 +50,15 @@ var daysModule = (function(){
     if (days.length === 1) return;
     var index = days.indexOf(currentDay);
     days.splice(index, 1);
-    switchDay(index);
 
  /// HERE
     $.ajax({
-    method: 'POST',
-    url: '/api/days/' + dayToAdd,
-    data: dayToAdd,
+    method: 'DELETE',
+    url: '/api/days/' + (index + 1),
+    data: null,
     success: function (responseData){
         console.log("SUCCESS");
+        switchDay(index);
     },
     error: function (errorObj){
       console.log("FAIL");

@@ -22,14 +22,31 @@ $(document).ready(function() {
     return selected;
   }
 
+// ADD TO DAY
   $('#attraction-select').on('click', 'button', function() {
     var $button = $(this),
         type = $button.data('type'),
         attractions = attractionsByType[type],
         id = $button.siblings('select').val();
     daysModule.addAttraction(findByTypeAndId(type, id));
+
+   $.ajax({
+        method: 'POST',
+        url: '/api/days/' + dayToAdd,
+        data: null,
+        success: function (responseData){
+            console.log("SUCCESS");
+        },
+        error: function (errorObj){
+          console.log("FAIL");
+        }
+
+    });
+
   });
 
+
+// REMOVE FROM ITINERARY
   $('#itinerary').on('click', 'button', function() {
     var $button = $(this),
         type = $button.data('type'),
