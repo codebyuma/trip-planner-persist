@@ -30,19 +30,6 @@ $(document).ready(function() {
         id = $button.siblings('select').val();
     daysModule.addAttraction(findByTypeAndId(type, id));
 
-   $.ajax({
-        method: 'POST',
-        url: '/api/days/' + dayToAdd,
-        data: null,
-        success: function (responseData){
-            console.log("SUCCESS");
-        },
-        error: function (errorObj){
-          console.log("FAIL");
-        }
-
-    });
-
   });
 
 

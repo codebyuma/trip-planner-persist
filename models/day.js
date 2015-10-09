@@ -4,7 +4,7 @@ var Days;
 
 var daySchema = new mongoose.Schema({
   number: Number,
-  hotel: {type: mongoose.Schema.Types.ObjectId, ref: 'Hotel'},
+  hotels: [{type: mongoose.Schema.Types.ObjectId, ref: 'Hotels'}],
   restaurants: [{type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant'}],
   activities: [{type: mongoose.Schema.Types.ObjectId, ref: 'Activity'}]
 })

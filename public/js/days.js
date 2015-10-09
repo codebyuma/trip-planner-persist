@@ -3,6 +3,7 @@
 
 var daysModule = (function(){
 
+  var thisDay;
   var exports = {},
       days = [{
         hotels:      [],
@@ -17,6 +18,7 @@ var daysModule = (function(){
       restaurants: [],
       activities: []
     });
+
     var dayToAdd = days.length;
 
     $.ajax({
@@ -24,7 +26,9 @@ var daysModule = (function(){
         url: '/api/days/' + dayToAdd,
         data: null,
         success: function (responseData){
-            console.log("SUCCESS");
+            // console.log("type ", typeof responseData);
+             console.log("data ", responseData);
+             //all_days.push(responseData);
         },
         error: function (errorObj){
           console.log("FAIL");
@@ -42,6 +46,7 @@ var daysModule = (function(){
     $title.children('span').remove();
     $title.prepend('<span>Day ' + (index + 1) + '</span>');
     currentDay = days[index];
+    thisDay = index+1;
     renderDay();
     renderDayButtons();
   }
@@ -72,9 +77,10 @@ var daysModule = (function(){
   function renderDayButtons () {
     var $daySelect = $('#day-select');
     $daySelect.empty();
-    days.forEach(function(day, i){
+    all_days.forEach(function(day, i){ /// HERE - all_days
       $daySelect.append(daySelectHTML(day, i, day === currentDay));
     });
+
     $daySelect.append('<button class="btn btn-circle day-btn new-day-btn">+</button>');
   }
 
@@ -85,6 +91,23 @@ var daysModule = (function(){
   exports.addAttraction = function(attraction) {
     if (currentDay[attraction.type].indexOf(attraction) !== -1) return;
     currentDay[attraction.type].push(attraction);
+
+    //console.log("STOP attraction ", typeof attraction._id);
+
+
+    $.ajax({
+      method: 'PUT',
+      url: '/api/days/' + thisDay + '/' + attraction.type,
+      data: attraction,
+      success: function (responseData){
+          console.log("SUCCESS");
+          
+      },
+      error: function (errorObj){
+        console.log("FAIL");
+      }
+    });
+
     renderDay(currentDay);
   };
 

@@ -59,7 +59,7 @@ var data = {
     {name: "Strand Bookstore", place: [new Place({address: "828 Broadway", city: "New York", state: "NY", phone: "123-456-7890", location: [40.733274, -73.990870]})], age_range: "All" }
   ],
   Days: [
-    {number: 1}
+    {number: 1, hotels: [], restaurants: [], activities: []}
   ]
 };
 

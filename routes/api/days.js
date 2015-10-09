@@ -24,11 +24,18 @@ dayRouter.get("/days/:day", function(req, res){
 dayRouter.post("/days/:day", function (req, res){
 	
 	var dayToAdd = Number(req.params.day);
+	console.log("day to add" , req.params.day);
 
-	newDay = new Days ({number: dayToAdd});
+	// newDay = new Days ({number: dayToAdd});
 
-	newDay.save(function(createdDay){
-		console.log("created day ", createdDay);
+	// newDay.save(function(createdDay){
+	// 	console.log("created day ", createdDay);
+	// 	res.json(createdDay);
+	// });
+
+	Days.create({number: dayToAdd})
+	.then (function (createdDay){
+		//console.log("created day ", createdDay);
 		res.json(createdDay);
 	});
 	
@@ -52,12 +59,31 @@ dayRouter.delete("/days/:day", function (req, res){
 })
 
 
-/** HERE */
-dayRouter.post("/days/:id/:attraction", function (req, res){
+
+dayRouter.put("/days/:day/:attractionType", function (req, res){
 	console.log("post days/id/attraction");
 
-	var dayId = req.params.id;
-	var attractionToAdd = req.params.attraction;
+	var dayToAddTo = req.params.day;
+	var attractionTypeToAdd = req.params.attractionType;
+	var attractionID = req.body._id;
+
+	// console.log("day to add to " + dayToAddTo);
+	// console.log(attractionTypeToAdd);
+	// console.log("attraction id " + attractionID);
+
+	Days.findOne({number: dayToAddTo})
+	.then (function(day){
+		// console.log("found day " , day);
+	   // console.log("attraction type array ", day[attractionTypeToAdd]);
+		day[attractionTypeToAdd].push(attractionID);
+		return day.save()
+		
+	})
+	.then (function (savedDay){
+		res.send(savedDay);
+	})
+
+	// console.log("attract id " , attractionID);
 
 	// somehow tell if this is to add OR remove attraction
 	// if (attractionToAdd === "restaurants"){
