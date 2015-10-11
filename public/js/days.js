@@ -9,13 +9,9 @@ var daysModule = (function(){
       currentDay = days[0];
 
   function addDay () {
-    // days.push({
-    //   hotels: [],
-    //   restaurants: [],
-    //   activities: []
-    // });
 
-    var dayToAdd = days.length;
+
+    var dayToAdd = days.length+1;
 
     $.ajax({
         method: 'POST',
@@ -25,6 +21,8 @@ var daysModule = (function(){
             // console.log("type ", typeof responseData);
              console.log("data ", responseData);
              all_days.push(responseData);
+             renderDayButtons();
+             switchDay(days.length - 1);
         },
         error: function (errorObj){
           console.log("FAIL");
@@ -32,8 +30,7 @@ var daysModule = (function(){
 
     });
 
-    renderDayButtons();
-    switchDay(days.length - 1);
+    
   }
 
   function switchDay (index) {
@@ -52,7 +49,6 @@ var daysModule = (function(){
     var index = days.indexOf(currentDay);
     days.splice(index, 1);
 
- /// HERE
     $.ajax({
     method: 'DELETE',
     url: '/api/days/' + (index + 1),

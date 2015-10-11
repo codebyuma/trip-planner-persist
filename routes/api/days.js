@@ -24,7 +24,7 @@ dayRouter.get("/days/:day", function(req, res){
 dayRouter.post("/days/:day", function (req, res){
 	
 	var dayToAdd = Number(req.params.day);
-	console.log("day to add" , req.params.day);
+	//console.log("day to add" , req.params.day);
 
 	Days.create({number: dayToAdd})
 	.then (function (createdDay){
@@ -35,18 +35,27 @@ dayRouter.post("/days/:day", function (req, res){
 })
 
 dayRouter.delete("/days/:day", function (req, res){
-	console.log("delete days/day");
+	//console.log("delete days/day");
 	var dayToDelete = Number(req.params.day);
 	Days.findOne({number: dayToDelete})
-	// .then(function(day){
-	// 	console.log("day",day);
-	// 	res.send();
-	// })
+
 		.remove(function(){
-			console.log("in remove");
-			console.log("then of find one .remove ");
-			res.send();
-		})
+			
+			Days.findOne({number: (dayToDelete+1)})
+			.then (function (day){
+				
+				if (day){ // switch the stored day number 
+					day.number = day.number-1;
+					day.save()
+					.then (function (){
+						res.send();
+					})
+				} else {
+					res.send();
+				}
+			})
+
+		});
 
 		
 })
