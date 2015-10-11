@@ -5,19 +5,15 @@ var daysModule = (function(){
 
   var thisDay;
   var exports = {},
-      days = [{
-        hotels:      [],
-        restaurants: [],
-        activities:  []
-      }],
+      days = all_days,
       currentDay = days[0];
 
   function addDay () {
-    days.push({
-      hotels: [],
-      restaurants: [],
-      activities: []
-    });
+    // days.push({
+    //   hotels: [],
+    //   restaurants: [],
+    //   activities: []
+    // });
 
     var dayToAdd = days.length;
 
@@ -28,7 +24,7 @@ var daysModule = (function(){
         success: function (responseData){
             // console.log("type ", typeof responseData);
              console.log("data ", responseData);
-             //all_days.push(responseData);
+             all_days.push(responseData);
         },
         error: function (errorObj){
           console.log("FAIL");
@@ -101,6 +97,7 @@ var daysModule = (function(){
       data: attraction,
       success: function (responseData){
           console.log("SUCCESS");
+          renderDay(currentDay);
           
       },
       error: function (errorObj){
@@ -108,14 +105,28 @@ var daysModule = (function(){
       }
     });
 
-    renderDay(currentDay);
+    
   };
 
   exports.removeAttraction = function (attraction) {
     var index = currentDay[attraction.type].indexOf(attraction);
     if (index === -1) return;
     currentDay[attraction.type].splice(index, 1);
-    renderDay(currentDay);
+
+    $.ajax({
+      method: 'DELETE',
+      url: '/api/days/' + thisDay + '/' + attraction.type,
+      data: attraction,
+      success: function (responseData){
+          console.log("SUCCESS");
+          renderDay(currentDay);
+          
+      },
+      error: function (errorObj){
+        console.log("FAIL");
+      }
+    });
+
   };
 
   function renderDay(day) {
@@ -124,10 +135,14 @@ var daysModule = (function(){
     Object.keys(day).forEach(function(type){
       var $list = $('#itinerary ul[data-type="' + type + '"]');
       $list.empty();
-      day[type].forEach(function(attraction){
-        $list.append(itineraryHTML(attraction));
-        mapModule.drawAttraction(attraction);
-      });
+      // console.log("type ", type);
+      // console.log("day type ", day[type]);
+      if (type == "hotels" || type == "restaurants" || type == "activities"){
+        day[type].forEach(function(attraction){
+          $list.append(itineraryHTML(attraction));
+          mapModule.drawAttraction(attraction);
+        });
+      }
     });
   }
 
