@@ -147,7 +147,7 @@ var daysModule = (function(){
   }
 
   $(document).ready(function(){
-    switchDay(0);
+    switchDay(0); // need to figure out why it isn't loading with the saved data.
     $('.day-buttons').on('click', '.new-day-btn', addDay);
     $('.day-buttons').on('click', 'button:not(.new-day-btn)', function() {
       switchDay($(this).index());
