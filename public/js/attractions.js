@@ -12,6 +12,7 @@ $(document).ready(function() {
   function findByTypeAndId (type, id) {
     var attractions = attractionsByType[type],
         selected;
+    console.log("in find by type and id, attractions: ", attractions);
     attractions.some(function(attraction){
       if (attraction._id === id) {
         selected = attraction;
@@ -38,6 +39,8 @@ $(document).ready(function() {
     var $button = $(this),
         type = $button.data('type'),
         id = $button.data('id');
+    console.log("in remove from itenerary, type: ", type);
+    console.log("in remove from itenerary, id: ", id );
     daysModule.removeAttraction(findByTypeAndId(type, id));
   });
 

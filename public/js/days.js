@@ -35,6 +35,7 @@ var daysModule = (function(){
 
   function switchDay (index) {
     var $title = $('#day-title');
+    console.log("days length ", days.length);
     if (index >= days.length) index = days.length - 1;
     $title.children('span').remove();
     $title.prepend('<span>Day ' + (index + 1) + '</span>');
@@ -69,7 +70,7 @@ var daysModule = (function(){
   function renderDayButtons () {
     var $daySelect = $('#day-select');
     $daySelect.empty();
-    all_days.forEach(function(day, i){ /// HERE - all_days
+    days.forEach(function(day, i){ 
       $daySelect.append(daySelectHTML(day, i, day === currentDay));
     });
 
@@ -82,7 +83,7 @@ var daysModule = (function(){
 
   exports.addAttraction = function(attraction) {
     if (currentDay[attraction.type].indexOf(attraction) !== -1) return;
-    currentDay[attraction.type].push(attraction);
+    
 
     //console.log("STOP attraction ", typeof attraction._id);
 
@@ -93,6 +94,7 @@ var daysModule = (function(){
       data: attraction,
       success: function (responseData){
           console.log("SUCCESS");
+          currentDay[attraction.type].push(attraction);
           renderDay(currentDay);
           
       },
@@ -131,12 +133,36 @@ var daysModule = (function(){
     Object.keys(day).forEach(function(type){
       var $list = $('#itinerary ul[data-type="' + type + '"]');
       $list.empty();
-      // console.log("type ", type);
-      // console.log("day type ", day[type]);
+
+
       if (type == "hotels" || type == "restaurants" || type == "activities"){
         day[type].forEach(function(attraction){
-          $list.append(itineraryHTML(attraction));
-          mapModule.drawAttraction(attraction);
+           if (typeof attraction != "object"){
+  
+                  $.ajax({
+                      method: 'GET',
+                      url: '/api/days/' + thisDay + '/' + type + "/" + attraction,
+                      data: null,
+                      success: function (responseData){
+                          console.log("SUCCESS");
+                          console.log(responseData);
+                          attraction = responseData;
+                          $list.append(itineraryHTML(attraction));
+                          mapModule.drawAttraction(attraction);
+                          
+                      },
+                      error: function (errorObj){
+                        console.log("FAIL");
+                      }
+                    });
+
+           }
+           else {
+            $list.append(itineraryHTML(attraction));
+             mapModule.drawAttraction(attraction);
+           }
+
+            
         });
       }
     });
